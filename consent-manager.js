@@ -22,7 +22,6 @@
     services: {
       metaPixelId: "",
       anyTrackUrl: "",
-      wiserNotifyId: "",
       analyticsScripts: [],
       marketingScripts: []
     }
@@ -131,18 +130,12 @@
     loadScript(url, "tmf-anytrack");
   }
 
-  function enableWiserNotify(id) {
-    if (!id) return;
-    loadScript("https://pt.wisernotify.com/pixel.js?ti=" + encodeURIComponent(id), "tmf-wisernotify");
-  }
-
   function apply(consent) {
     currentConsent = consent;
     if (consent.analytics) loadList(config.services.analyticsScripts, "tmf-analytics");
     if (consent.marketing) {
       enableMetaPixel(config.services.metaPixelId);
       enableAnyTrack(config.services.anyTrackUrl);
-      enableWiserNotify(config.services.wiserNotifyId);
       loadList(config.services.marketingScripts, "tmf-marketing");
     }
     window.dispatchEvent(new CustomEvent("tmf:consent", { detail: consent }));

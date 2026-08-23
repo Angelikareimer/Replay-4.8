@@ -15,6 +15,7 @@
     site: window.location.hostname,
     locale: "de",
     reloadOnRevoke: true,
+    showSettingsButton: false,
     legacyCookieNames: ["cookieyes-consent", "cookieyesID", "cky-consent", "cky-action"],
     analyticsCookieNames: ["_ga", "_gid", "_gat"],
     marketingCookieNames: ["_fbp", "_fbc", "_gcl_au"],
@@ -230,12 +231,18 @@
     root.innerHTML = dialogMarkup();
     document.body.appendChild(root);
 
-    var settings = document.createElement("button");
-    settings.type = "button";
-    settings.className = "tmf-cookie-settings";
-    settings.textContent = "Cookie-Einstellungen";
-    settings.addEventListener("click", openDialog);
-    document.body.appendChild(settings);
+    if (config.showSettingsButton) {
+      var settings = document.createElement("button");
+      settings.type = "button";
+      settings.className = "tmf-cookie-settings";
+      settings.textContent = "Cookie-Einstellungen";
+      settings.addEventListener("click", openDialog);
+      document.body.appendChild(settings);
+    }
+
+    document.querySelectorAll("[data-tmf-consent-settings]").forEach(function (trigger) {
+      trigger.addEventListener("click", openDialog);
+    });
 
     root.querySelector("[data-reject]").addEventListener("click", function () { save(false, false); });
     root.querySelector("[data-accept]").addEventListener("click", function () { save(true, true); });

@@ -94,7 +94,16 @@
       window.setTimeout(hide, config.displayDurationMs);
     }
 
-    window.setTimeout(show, config.delayMs);
+    function showWhenClear() {
+      var consentDialog = document.getElementById("tmf-consent");
+      if (consentDialog && !consentDialog.hidden) {
+        window.setTimeout(showWhenClear, 750);
+        return;
+      }
+      show();
+    }
+
+    window.setTimeout(showWhenClear, config.delayMs);
     return { close: hide };
   }
 

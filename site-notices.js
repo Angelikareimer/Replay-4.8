@@ -30,6 +30,14 @@
     }).sort(function (a, b) { return (b.priority || 0) - (a.priority || 0); });
   }
 
+  function readSession(key) {
+    try { return Number(window.sessionStorage.getItem(key) || 0); } catch (_) { return 0; }
+  }
+
+  function writeSession(key, value) {
+    try { window.sessionStorage.setItem(key, String(value)); } catch (_) {}
+  }
+
   function addStyles() {
     if (document.getElementById("tmf-social-proof-styles")) return;
     var style = document.createElement("style");
@@ -51,7 +59,7 @@
     var messages = activeMessages(config.messages);
     if (!config.enabled || !messages.length) return;
     var storageKey = "tmf_proof_" + config.siteId;
-    var shown = Number(window.sessionStorage.getItem(storageKey) || 0);
+    var shown = readSession(storageKey);
     if (shown >= config.maxPerSession) return;
     addStyles();
 
@@ -82,7 +90,7 @@
       if (close) close.addEventListener("click", hide);
       root.dataset.visible = "true";
       shown += 1;
-      window.sessionStorage.setItem(storageKey, String(shown));
+      writeSession(storageKey, shown);
       window.setTimeout(hide, config.displayDurationMs);
     }
 
